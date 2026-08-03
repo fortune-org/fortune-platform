@@ -1,0 +1,360 @@
+{
+  "meta": {
+    "titleIndex": "Saju Manseryeok Calculator - Free Four Pillars, Tarot & Astrology | Fortune Platform",
+    "descIndex": "Enter your birth date to compute an accurate Korean Four Pillars (Saju) chart: heavenly stems and earthly branches, five elements, Napeum, solar terms and Daeun. Free open-source calculator.",
+    "titleGuide": "Saju Manseryeok Guide - Stems & Branches, Five Elements, Solar Terms",
+    "titleFaq": "FAQ - Saju Manseryeok Calculator",
+    "titleAbout": "About - Fortune Platform Open Source Manseryeok"
+  },
+  "brand": "Fortune Platform",
+  "h1Index": "Saju Manseryeok Calculator — free Four Pillars, Tarot & Astrology",
+  "brandSub": "Open-source Manseryeok · Tarot · Astrology",
+  "nav": { "home": "Calculator", "guide": "Guide", "faq": "FAQ", "about": "About" },
+  "lang": { "label": "Language", "ko": "한국어", "en": "English" },
+  "mode": {
+    "title": "Select mode",
+    "saju": "Saju (Four Pillars)",
+    "tarot": "Tarot",
+    "astro": "Astrology",
+    "sajuDesc": "Compute the Four Pillars and traditional calendar details from your birth date and time.",
+    "tarotDesc": "Choose a spread and draw cards to see their traditional keywords.",
+    "astroDesc": "Compute a Western natal chart from your birth information."
+  },
+  "common": {
+    "calculate": "Calculate",
+    "reset": "Reset",
+    "loading": "Calculating…",
+    "dataLoading": "Loading data…",
+    "copyAll": "📋 Copy all as Markdown",
+    "copied": "✅ Copied!",
+    "copyFailed": "Copy failed — please try again",
+    "none": "None",
+    "errors": {
+      "invalidDate": "Please enter a valid birth date.",
+      "invalidTime": "Please enter a valid time.",
+      "invalidLunar": "That lunar date does not exist. Check the leap-month option.",
+      "outOfRange": "Outside the supported range (1900–2100).",
+      "dataLoad": "Failed to load data. Please refresh and try again.",
+      "needDate": "Please enter a birth date first.",
+      "needLocation": "Enter latitude/longitude or choose a city."
+    }
+  },
+  "form": { "year": "Year", "month": "Month", "day": "Day", "hour": "Hour", "minute": "Min" },
+  "saju": {
+    "form": {
+      "title": "Birth information",
+      "birthDate": "Date of birth",
+      "calendarType": "Calendar",
+      "solar": "Solar",
+      "lunar": "Lunar",
+      "leapMonth": "Leap month",
+      "birthTime": "Time of birth",
+      "timeUnknown": "Time unknown (skip hour pillar)",
+      "timezone": "Birthplace time zone",
+      "options": "Advanced options",
+      "koreanAdjust": "Korean −30 min adjustment (Seoul longitude vs UTC+9 meridian)",
+      "yajasi": "Late-Rat-hour rule (yajasi) — births after 23:00 keep the same day",
+      "manualDst": "Daylight saving time was in effect at birth (−1 hour)",
+      "dstAutoNote": "For Korea, historical DST (1948–1960, 1987–1988) is applied automatically.",
+      "gender": "Sex (for Daeun luck cycles)",
+      "genderNone": "Not specified",
+      "genderM": "Male",
+      "genderF": "Female"
+    },
+    "tz": {
+      "korea": "Korea (UTC+9)",
+      "japan": "Japan (UTC+9)",
+      "china": "China (UTC+8)",
+      "hongkong": "Hong Kong (UTC+8)",
+      "thailand": "Thailand (UTC+7)",
+      "utc": "UTC (UTC+0)",
+      "london": "London (UTC+0)",
+      "newyork": "New York (UTC−5)",
+      "losangeles": "Los Angeles (UTC−8)"
+    },
+    "result": {
+      "title": "Manseryeok Result",
+      "basic": "Basic information",
+      "solarDate": "Solar date",
+      "lunarDate": "Lunar date",
+      "leap": "Leap month",
+      "weekday": "Weekday",
+      "zodiac": "Zodiac animal",
+      "sajuYear": "Saju year",
+      "curTerm": "Current solar term",
+      "nextTerm": "Next solar term",
+      "monthLord": "Month branch (Wolryeong)",
+      "pillarsTitle": "Four Pillars (Stems & Branches)",
+      "pillarHour": "Hour",
+      "pillarDay": "Day",
+      "pillarMonth": "Month",
+      "pillarYear": "Year",
+      "rowSipseong": "Ten Gods",
+      "rowGanji": "Ganji",
+      "rowStem": "Heavenly stem",
+      "rowBranch": "Earthly branch",
+      "rowJijangan": "Hidden stems",
+      "rowUnseong": "12 Stages",
+      "rowNapeum": "Napeum element",
+      "dayMaster": "Day master",
+      "elementsTitle": "Five-element distribution",
+      "gongmang": "Void branches (Gongmang)",
+      "daeunTitle": "Daeun (10-year luck cycles)",
+      "daeunForward": "Forward",
+      "daeunBackward": "Reverse",
+      "daeunStart": "Starting age",
+      "age": "",
+      "timeUnknownNote": "Birth time not entered — the hour pillar is omitted.",
+      "dstNote": "Daylight saving adjustment (−1 hour) was applied.",
+      "dayShiftedNote": "Born after 23:00 — the day pillar advanced to the next day (standard midnight-Rat rule).",
+      "nightRatNote": "Born during the late Rat hour (23:00–01:00).",
+      "hourRange": "Hour range"
+    }
+  },
+  "weekday": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  "animal": {
+    "rat": "Rat", "ox": "Ox", "tiger": "Tiger", "rabbit": "Rabbit",
+    "dragon": "Dragon", "snake": "Snake", "horse": "Horse", "goat": "Goat",
+    "monkey": "Monkey", "rooster": "Rooster", "dog": "Dog", "pig": "Pig"
+  },
+  "element": { "wood": "Wood (木)", "fire": "Fire (火)", "earth": "Earth (土)", "metal": "Metal (金)", "water": "Water (水)" },
+  "yinyang": { "yang": "Yang (陽)", "um": "Yin (陰)" },
+  "tarot": {
+    "form": {
+      "title": "Draw tarot cards",
+      "spread": "Spread",
+      "question": "Question (optional)",
+      "questionPh": "Write your question (included when copying the result)",
+      "allowReversed": "Include reversed cards",
+      "draw": "Draw cards",
+      "redraw": "Draw again"
+    },
+    "spread": {
+      "one": "One card",
+      "three": "Three cards — past · present · future",
+      "five": "Five cards — situation · obstacle · advice · surroundings · outcome",
+      "celtic": "Celtic Cross (10 cards)"
+    },
+    "pos": {
+      "focus": "Focus",
+      "past": "Past",
+      "present": "Present",
+      "future": "Future",
+      "situation": "Situation",
+      "obstacle": "Obstacle",
+      "advice": "Advice",
+      "surroundings": "Surroundings",
+      "outcome": "Outcome",
+      "heart": "Heart of the matter",
+      "challenge": "Challenge",
+      "foundation": "Foundation",
+      "recentPast": "Recent past",
+      "crown": "Potential / goal",
+      "nearFuture": "Near future",
+      "self": "Your attitude",
+      "environment": "External influence",
+      "hopesFears": "Hopes & fears"
+    },
+    "result": { "title": "Tarot Result" },
+    "upright": "Upright",
+    "reversed": "Reversed",
+    "keywords": "Keywords",
+    "major": "Major Arcana",
+    "minor": "Minor Arcana",
+    "suit": { "wands": "Wands (Fire)", "cups": "Cups (Water)", "swords": "Swords (Air)", "pentacles": "Pentacles (Earth)" },
+    "disclaimer": "Card meanings are general keywords from the Rider–Waite tradition — not AI interpretation or divinatory advice."
+  },
+  "astro": {
+    "form": {
+      "title": "Natal chart",
+      "date": "Birth date (solar)",
+      "time": "Birth time",
+      "timeNote": "If unknown, 12:00 is assumed and the Ascendant/houses are hidden.",
+      "timeUnknown": "Time unknown",
+      "place": "Birthplace",
+      "lat": "Latitude (N +)",
+      "lon": "Longitude (E +)",
+      "calculate": "Compute chart"
+    },
+    "city": {
+      "seoul": "Seoul (Korea)",
+      "tokyo": "Tokyo (Japan)",
+      "beijing": "Beijing (China)",
+      "hongkong": "Hong Kong",
+      "bangkok": "Bangkok (Thailand)",
+      "london": "London (UK)",
+      "newyork": "New York (US)",
+      "losangeles": "Los Angeles (US)",
+      "custom": "Custom (enter lat/lon)"
+    },
+    "result": {
+      "title": "Natal Chart",
+      "planets": "Planetary positions",
+      "planet": "Planet",
+      "sign": "Sign",
+      "degree": "Degree",
+      "house": "House",
+      "angles": "Angles",
+      "asc": "Ascendant (ASC)",
+      "mc": "Midheaven (MC)",
+      "housesNote": "Houses use the Equal House system.",
+      "aspectsTitle": "Aspects",
+      "noAspects": "No aspects within orb.",
+      "balanceTitle": "Element & modality balance",
+      "elements": "Elements",
+      "modality": "Modality"
+    },
+    "el": { "fire": "Fire", "earth": "Earth", "air": "Air", "water": "Water" },
+    "mod": { "cardinal": "Cardinal", "fixed": "Fixed", "mutable": "Mutable" },
+    "sign": {
+      "aries": "Aries", "taurus": "Taurus", "gemini": "Gemini", "cancer": "Cancer",
+      "leo": "Leo", "virgo": "Virgo", "libra": "Libra", "scorpio": "Scorpio",
+      "sagittarius": "Sagittarius", "capricorn": "Capricorn", "aquarius": "Aquarius", "pisces": "Pisces"
+    },
+    "planet": {
+      "sun": "Sun", "moon": "Moon", "mercury": "Mercury", "venus": "Venus", "mars": "Mars",
+      "jupiter": "Jupiter", "saturn": "Saturn", "uranus": "Uranus", "neptune": "Neptune", "pluto": "Pluto"
+    },
+    "aspect": {
+      "conjunction": "Conjunction (0°)", "sextile": "Sextile (60°)", "square": "Square (90°)",
+      "trine": "Trine (120°)", "opposition": "Opposition (180°)"
+    },
+    "retrograde": "Retrograde",
+    "disclaimer": "Uses a low-precision ephemeris (error ≲0.1°). For births very close to a sign boundary (±0.5°), verify with a professional ephemeris.",
+    "boundaryWarn": "⚠ Very close to a sign boundary"
+  },
+  "footer": {
+    "aboutTitle": "Open-source project",
+    "aboutText": "Fortune Platform is an MIT-licensed open-source project that makes a Korean Manseryeok (Four Pillars), tarot and astrology calculator free for everyone to use and verify. Everything runs in your browser — no personal data is collected.",
+    "links": "Links",
+    "landing": "Web app (GitHub Pages)",
+    "repo": "GitHub repository",
+    "contributorTitle": "Contributor",
+    "contributorName": "Park Sung-mo (박성모)",
+    "contactTitle": "Contact",
+    "contactReveal": "Reveal email address",
+    "contactNote": "Shown on click to prevent spam crawling.",
+    "license": "MIT License",
+    "privacy": "No personal data is collected or transmitted. All calculations run locally."
+  },
+  "about": {
+    "title": "About the project",
+    "intro": "Fortune Platform open-sources the Manseryeok (Korean Four Pillars calendar) engine refined in a production Saju AI service. It runs entirely with plain HTML, CSS and JavaScript — no backend — and is hosted for free on GitHub Pages. It provides accurate calculations only, with no AI interpretation.",
+    "featuresTitle": "Features",
+    "features": [
+      "Precise lunar calendar conversion for 1900–2100 (incl. leap months)",
+      "Year/month pillars decided by exact solar-term times (minute precision)",
+      "24 solar terms and month-branch (Wolryeong) info",
+      "Stems & branches, five elements, hidden stems, Ten Gods, 12 life stages, void branches",
+      "Napeum (納音) elements for all 60 cycle pairs",
+      "Daeun 10-year luck cycles (forward/reverse, starting age)",
+      "DST, historical Korean standard time, yajasi option, multi-timezone",
+      "78-card tarot deck (4 spreads, reversed option)",
+      "Western natal chart (10 planets, ASC/MC, aspects)",
+      "Copy any result as Markdown"
+    ],
+    "techTitle": "Tech stack",
+    "tech": [
+      "Frontend: plain HTML5 + CSS3 + JavaScript (ES6 modules)",
+      "Backend: none — everything is computed in the browser",
+      "Hosting: GitHub Pages (completely free)"
+    ],
+    "dataTitle": "Data & accuracy",
+    "dataText": "Calendar data (solar-term times and the lunar table, 1900–2100) was extracted from a reference Manseryeok database and cross-verified across all 73,000+ days; gaps were recomputed with the NASA JPL DE421 ephemeris. Astrology uses a public-domain low-precision algorithm whose error against the JPL ephemeris is enforced by tests (see the test/ directory).",
+    "contributorTitle": "Contributor",
+    "contributorRole": "Author & maintainer",
+    "licenseTitle": "License",
+    "licenseText": "This project is distributed under the MIT License. You are free to use, modify and redistribute it.",
+    "licenseLink": "View full license",
+    "contributeTitle": "Contributing",
+    "contributeText": "Bug reports, data corrections and feature ideas are all welcome — please open a GitHub issue or pull request.",
+    "contributeLink": "Fork on GitHub"
+  },
+  "guide": {
+    "title": "Complete Saju Manseryeok Guide",
+    "intro": "Key concepts for understanding a Korean Four Pillars chart: heavenly stems and earthly branches, the five elements, solar terms and the month branch, and Napeum elements.",
+    "s1t": "What are Heavenly Stems and Earthly Branches?",
+    "s1p": "The stems and branches form the traditional East Asian time-reckoning system. Ten heavenly stems combine with twelve earthly branches into a cycle of sixty pairs (the sexagenary cycle). A Saju chart expresses the year, month, day and hour of birth as four such pairs — eight characters in total, hence 'Saju Palja' (four pillars, eight characters).",
+    "s2t": "Why the Five Elements matter",
+    "s2p": "The five elements are Wood, Fire, Earth, Metal and Water. Every stem and branch carries an element and a yin/yang polarity, and the distribution of elements across the eight characters is the starting point of traditional analysis. This calculator tallies the distribution automatically.",
+    "s3t": "Solar terms and the month branch (Wolryeong)",
+    "s3p": "The year and month pillars change not at calendar boundaries but at solar-term moments determined by the sun's position. The year pillar changes at Ipchun (start of spring); each month pillar changes at its 'Jeol' term. Someone born before Ipchun uses the previous year's pillar. The month branch (Wolryeong) represents the seasonal energy of the whole chart. This calculator compares term times to the minute.",
+    "s4t": "Napeum elements (納音五行)",
+    "s4p": "Napeum assigns a poetic elemental name to each pair of the sixty cycle — for example Gapja/Eulchuk are 'Gold in the Sea' (海中金) and Byeongin/Jeongmyo are 'Fire in the Furnace' (爐中火). Traditional Manseryeok almanacs print the Napeum of each pillar.",
+    "s5t": "Hidden stems, Ten Gods and the 12 stages",
+    "s5p": "Hidden stems (Jijanggan) are the stems concealed within each branch. The Ten Gods classify every other character relative to the day master (the day stem) into ten relations. The 12 life stages express the day master's strength cycle (Birth through Nurture) at each branch.",
+    "s6t": "Daeun cycles and time corrections",
+    "s6p": "Daeun are 10-year luck cycles that proceed forward or backward from the month pillar (forward for yang-year males and yin-year females). The starting age is the day count to the nearest Jeol term divided by three. For accurate hour pillars the calculator supports the Korean −30 minute longitude adjustment, Korean DST periods (1948–1960, 1987–1988), and the historical UTC+8:30 standard time (1908–1911, 1954–1961).",
+    "stemsTable": "The 10 Heavenly Stems",
+    "branchesTable": "The 12 Earthly Branches",
+    "termsTable": "The 24 Solar Terms",
+    "colName": "Name",
+    "colHanja": "Hanja",
+    "colElement": "Element",
+    "colYinyang": "Yin/Yang",
+    "colAnimal": "Animal",
+    "colMonth": "Term month",
+    "colType": "Type",
+    "jeol": "Jeol — month boundary",
+    "junggi": "Junggi (mid-term)",
+    "backToCalc": "Back to the calculator"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      {
+        "q": "How is the Saju chart calculated?",
+        "a": "From your birth date and time the app converts lunar dates if needed, compares exact solar-term times, and derives the four pillars. Everything is computed instantly in your browser."
+      },
+      {
+        "q": "Why does the birth time matter?",
+        "a": "The time determines the hour pillar, and births after 23:00 can even shift the day pillar. If you don't know it, choose 'Time unknown' — the chart shows three pillars."
+      },
+      {
+        "q": "Can I enter a lunar birthday?",
+        "a": "Yes. Switch the calendar to 'Lunar' and the app converts it precisely to a solar date within 1900–2100, including leap months."
+      },
+      {
+        "q": "How do I enter a leap-month birth?",
+        "a": "Select 'Lunar' and tick the 'Leap month' checkbox. If that year has no such leap month you'll get an error message."
+      },
+      {
+        "q": "What about births near a term boundary such as Ipchun?",
+        "a": "Pillars are decided by the exact term moment (to the minute), not the date. Born on Ipchun day but before the Ipchun time? The previous year's pillar is used."
+      },
+      {
+        "q": "What is the Korean −30 minute adjustment?",
+        "a": "Korea's standard meridian is 135°E but Seoul lies near 127°E, so solar time runs about 30 minutes behind the clock. By convention the two-hour blocks are shifted 30 minutes later. It is on by default for Korean births."
+      },
+      {
+        "q": "Are DST and historical standard time handled?",
+        "a": "Yes. Korean DST periods (1948–1960, 1987–1988) subtract one hour automatically, and the UTC+8:30 standard-time eras (1908–1911, 1954–1961) are reflected. For other countries use the manual DST checkbox."
+      },
+      {
+        "q": "What is the yajasi (late Rat hour) rule?",
+        "a": "By default, births after 23:00 belong to the next day's Rat hour. The yajasi convention keeps them on the same day instead. You can toggle it in the advanced options; schools differ on this."
+      },
+      {
+        "q": "Are the tarot and astrology results interpretations?",
+        "a": "No. Tarot shows traditional card keywords and astrology shows computed celestial positions. This project deliberately contains no AI interpretation or divinatory advice."
+      },
+      {
+        "q": "Is my personal information stored?",
+        "a": "No. There is no backend server; everything you enter is processed only inside your browser and never transmitted or stored."
+      }
+    ]
+  },
+  "md": {
+    "generatedBy": "Generated by Fortune Platform (open-source Manseryeok)",
+    "sajuTitle": "Saju Manseryeok Result",
+    "tarotTitle": "Tarot Result",
+    "astroTitle": "Astrology Natal Chart",
+    "input": "Input",
+    "question": "Question",
+    "spread": "Spread",
+    "position": "Position",
+    "card": "Card",
+    "orientation": "Orientation",
+    "birth": "Birth"
+  }
+}

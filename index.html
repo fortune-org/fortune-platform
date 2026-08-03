@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사주 만세력 계산기 - 무료 만세력·타로·점성술 | Fortune Platform</title>
+  <meta name="description" content="생년월일을 입력하면 정확한 사주 만세력을 계산합니다. 천간지지, 오행, 납음오행, 절기, 대운까지 무료로 제공하는 오픈소스 만세력 계산기입니다.">
+  <meta name="keywords" content="사주, 만세력, 사주 계산기, 무료 사주, 천간지지, 오행, 납음오행, 절기, 월령, 대운, 타로, 점성술, manseryeok, saju, four pillars">
+  <link rel="canonical" href="https://fortune-org.github.io/fortune-platform/">
+  <link rel="alternate" hreflang="ko" href="https://fortune-org.github.io/fortune-platform/?lang=ko">
+  <link rel="alternate" hreflang="en" href="https://fortune-org.github.io/fortune-platform/?lang=en">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="사주 만세력 계산기 - Fortune Platform">
+  <meta property="og:description" content="천간지지·오행·납음오행·절기·대운까지 계산하는 무료 오픈소스 만세력. 타로·점성술 포함.">
+  <meta property="og:url" content="https://fortune-org.github.io/fortune-platform/">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "사주 만세력 계산기 (Fortune Platform)",
+    "description": "정확한 무료 온라인 사주 만세력·타로·점성술 계산기",
+    "keywords": "사주, 만세력, 사주 계산기, 천간지지, 오행, 무료 사주, 타로, 점성술",
+    "url": "https://fortune-org.github.io/fortune-platform/",
+    "applicationCategory": "LifestyleApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "license": "https://opensource.org/licenses/MIT"
+  }
+  </script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="./">
+      <span class="brand-mark" aria-hidden="true">卦</span>
+      <span class="brand-text">
+        <strong data-i18n="brand">Fortune Platform</strong>
+        <small data-i18n="brandSub">오픈소스 만세력 · 타로 · 점성술</small>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="주 메뉴">
+      <a href="./" class="active" data-i18n="nav.home">계산기</a>
+      <a href="guide.html" data-i18n="nav.guide">가이드</a>
+      <a href="faq.html" data-i18n="nav.faq">FAQ</a>
+      <a href="about.html" data-i18n="nav.about">소개</a>
+    </nav>
+    <div class="lang-switch" role="group" data-i18n-aria="lang.label" aria-label="언어 선택">
+      <button type="button" data-lang-btn="ko" data-i18n="lang.ko">한국어</button>
+      <button type="button" data-lang-btn="en" data-i18n="lang.en">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="container" id="main">
+  <h1 data-i18n="h1Index" class="visually-hidden">사주 만세력 계산기</h1>
+
+  <p id="app-error" class="error-box" hidden data-i18n="common.errors.dataLoad">데이터를 불러오지 못했습니다.</p>
+
+  <!-- 모드 선택 -->
+  <div class="mode-tabs" role="tablist" data-i18n-aria="mode.title" aria-label="모드 선택">
+    <button type="button" role="tab" id="tab-saju" aria-controls="panel-saju" aria-selected="true" class="active">
+      <span aria-hidden="true">☯</span> <span data-i18n="mode.saju">사주 만세력</span>
+    </button>
+    <button type="button" role="tab" id="tab-tarot" aria-controls="panel-tarot" aria-selected="false">
+      <span aria-hidden="true">🂠</span> <span data-i18n="mode.tarot">타로</span>
+    </button>
+    <button type="button" role="tab" id="tab-astro" aria-controls="panel-astro" aria-selected="false">
+      <span aria-hidden="true">✦</span> <span data-i18n="mode.astro">점성술</span>
+    </button>
+  </div>
+
+  <!-- ── 사주 만세력 ─────────────────────────────── -->
+  <section id="panel-saju" role="tabpanel" aria-labelledby="tab-saju">
+    <p class="mode-desc" data-i18n="mode.sajuDesc">생년월일·시간으로 사주팔자와 만세력 정보를 계산합니다.</p>
+    <p id="saju-loading" class="loading" data-i18n="common.dataLoading">데이터 로딩 중…</p>
+
+    <form id="saju-form" class="card" hidden novalidate>
+      <h2 data-i18n="saju.form.title">출생 정보 입력</h2>
+
+      <fieldset>
+        <legend data-i18n="saju.form.birthDate">생년월일</legend>
+        <div class="field-row">
+          <label class="field">
+            <span data-i18n="form.year">년</span>
+            <input type="number" id="saju-year" min="1900" max="2100" placeholder="1990" required inputmode="numeric">
+          </label>
+          <label class="field">
+            <span data-i18n="form.month">월</span>
+            <input type="number" id="saju-month" min="1" max="12" placeholder="5" required inputmode="numeric">
+          </label>
+          <label class="field">
+            <span data-i18n="form.day">일</span>
+            <input type="number" id="saju-day" min="1" max="31" placeholder="15" required inputmode="numeric">
+          </label>
+        </div>
+        <div class="field-row radio-row">
+          <span class="field-label" data-i18n="saju.form.calendarType">달력 기준</span>
+          <label><input type="radio" name="saju-cal" id="saju-cal-solar" checked> <span data-i18n="saju.form.solar">양력</span></label>
+          <label><input type="radio" name="saju-cal" id="saju-cal-lunar"> <span data-i18n="saju.form.lunar">음력</span></label>
+          <label id="saju-leap-wrap" hidden><input type="checkbox" id="saju-leap"> <span data-i18n="saju.form.leapMonth">윤달</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="saju.form.birthTime">출생 시간</legend>
+        <div class="field-row">
+          <label class="field">
+            <span data-i18n="form.hour">시</span>
+            <input type="number" id="saju-hour" min="0" max="23" placeholder="14" inputmode="numeric">
+          </label>
+          <label class="field">
+            <span data-i18n="form.minute">분</span>
+            <input type="number" id="saju-minute" min="0" max="59" placeholder="30" inputmode="numeric">
+          </label>
+          <label class="check-inline"><input type="checkbox" id="saju-time-unknown"> <span data-i18n="saju.form.timeUnknown">출생 시간 모름</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend data-i18n="saju.form.timezone">출생지 시간대</legend>
+        <div class="field-row">
+          <select id="saju-tz" data-i18n-aria="saju.form.timezone" aria-label="출생지 시간대">
+            <option value="korea" selected data-i18n="saju.tz.korea">한국 (UTC+9)</option>
+            <option value="japan" data-i18n="saju.tz.japan">일본 (UTC+9)</option>
+            <option value="china" data-i18n="saju.tz.china">중국 (UTC+8)</option>
+            <option value="hongkong" data-i18n="saju.tz.hongkong">홍콩 (UTC+8)</option>
+            <option value="thailand" data-i18n="saju.tz.thailand">태국 (UTC+7)</option>
+            <option value="utc" data-i18n="saju.tz.utc">UTC (UTC+0)</option>
+            <option value="london" data-i18n="saju.tz.london">런던 (UTC+0)</option>
+            <option value="newyork" data-i18n="saju.tz.newyork">뉴욕 (UTC-5)</option>
+            <option value="losangeles" data-i18n="saju.tz.losangeles">로스앤젤레스 (UTC-8)</option>
+          </select>
+          <label class="field">
+            <span data-i18n="saju.form.gender">성별 (대운 계산용)</span>
+            <select id="saju-gender">
+              <option value="" data-i18n="saju.form.genderNone">선택 안 함</option>
+              <option value="M" data-i18n="saju.form.genderM">남성</option>
+              <option value="F" data-i18n="saju.form.genderF">여성</option>
+            </select>
+          </label>
+        </div>
+        <p class="muted small" data-i18n="saju.form.dstAutoNote">한국은 서머타임(1948–1960, 1987–1988)이 자동 반영됩니다.</p>
+      </fieldset>
+
+      <details class="advanced">
+        <summary data-i18n="saju.form.options">상세 옵션</summary>
+        <label class="check-block"><input type="checkbox" id="saju-korean-adjust" checked> <span data-i18n="saju.form.koreanAdjust">한국식 -30분 보정</span></label>
+        <label class="check-block"><input type="checkbox" id="saju-yajasi"> <span data-i18n="saju.form.yajasi">야자시 적용</span></label>
+        <label class="check-block" id="saju-manual-dst-wrap" hidden><input type="checkbox" id="saju-manual-dst"> <span data-i18n="saju.form.manualDst">출생 당시 서머타임 시행 중</span></label>
+      </details>
+
+      <p id="saju-error" class="error-box" role="alert" hidden></p>
+
+      <div class="btn-row">
+        <button type="submit" class="btn primary" data-i18n="common.calculate">만세력 계산</button>
+        <button type="reset" class="btn" data-i18n="common.reset">초기화</button>
+      </div>
+    </form>
+
+    <section id="saju-result" class="card result-card" hidden aria-live="polite">
+      <div class="result-head">
+        <h2 data-i18n="saju.result.title">만세력 결과</h2>
+        <button type="button" id="copy-saju" class="btn copy-btn" data-i18n="common.copyAll">📋 모든 정보 복사 (.md)</button>
+      </div>
+      <div id="saju-result-body"></div>
+    </section>
+  </section>
+
+  <!-- ── 타로 ────────────────────────────────────── -->
+  <section id="panel-tarot" role="tabpanel" aria-labelledby="tab-tarot" hidden>
+    <p class="mode-desc" data-i18n="mode.tarotDesc">스프레드를 선택하고 카드를 뽑아 전통 키워드를 확인합니다.</p>
+
+    <form id="tarot-form" class="card" novalidate>
+      <h2 data-i18n="tarot.form.title">타로 카드 뽑기</h2>
+      <div class="field-row">
+        <label class="field grow">
+          <span data-i18n="tarot.form.spread">스프레드 선택</span>
+          <select id="tarot-spread">
+            <option value="one" data-i18n="tarot.spread.one">원 카드 (1장)</option>
+            <option value="three" selected data-i18n="tarot.spread.three">쓰리 카드 (3장)</option>
+            <option value="five" data-i18n="tarot.spread.five">파이브 카드 (5장)</option>
+            <option value="celtic" data-i18n="tarot.spread.celtic">켈틱 크로스 (10장)</option>
+          </select>
+        </label>
+      </div>
+      <label class="field">
+        <span data-i18n="tarot.form.question">질문 (선택)</span>
+        <input type="text" id="tarot-question" maxlength="200" data-i18n-placeholder="tarot.form.questionPh">
+      </label>
+      <label class="check-block"><input type="checkbox" id="tarot-reversed" checked> <span data-i18n="tarot.form.allowReversed">역방향 카드 포함</span></label>
+      <div class="btn-row">
+        <button type="submit" id="tarot-draw-btn" class="btn primary" data-i18n="tarot.form.draw">카드 뽑기</button>
+      </div>
+    </form>
+
+    <section id="tarot-result" class="card result-card" hidden aria-live="polite">
+      <div class="result-head">
+        <h2 data-i18n="tarot.result.title">타로 결과</h2>
+        <button type="button" id="copy-tarot" class="btn copy-btn" data-i18n="common.copyAll">📋 모든 정보 복사 (.md)</button>
+      </div>
+      <div id="tarot-result-body"></div>
+    </section>
+  </section>
+
+  <!-- ── 점성술 ──────────────────────────────────── -->
+  <section id="panel-astro" role="tabpanel" aria-labelledby="tab-astro" hidden>
+    <p class="mode-desc" data-i18n="mode.astroDesc">출생 정보를 바탕으로 서양 점성술 출생 차트를 계산합니다.</p>
+
+    <form id="astro-form" class="card" novalidate>
+      <h2 data-i18n="astro.form.title">출생 차트 계산</h2>
+      <fieldset>
+        <legend data-i18n="astro.form.date">출생 날짜 (양력)</legend>
+        <div class="field-row">
+          <label class="field"><span data-i18n="form.year">년</span>
+            <input type="number" id="astro-year" min="1900" max="2100" placeholder="1990" required inputmode="numeric"></label>
+          <label class="field"><span data-i18n="form.month">월</span>
+            <input type="number" id="astro-month" min="1" max="12" placeholder="5" required inputmode="numeric"></label>
+          <label class="field"><span data-i18n="form.day">일</span>
+            <input type="number" id="astro-day" min="1" max="31" placeholder="15" required inputmode="numeric"></label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend data-i18n="astro.form.time">출생 시간</legend>
+        <div class="field-row">
+          <label class="field"><span data-i18n="form.hour">시</span>
+            <input type="number" id="astro-hour" min="0" max="23" placeholder="14" inputmode="numeric"></label>
+          <label class="field"><span data-i18n="form.minute">분</span>
+            <input type="number" id="astro-minute" min="0" max="59" placeholder="30" inputmode="numeric"></label>
+          <label class="check-inline"><input type="checkbox" id="astro-time-unknown"> <span data-i18n="astro.form.timeUnknown">출생 시간 모름</span></label>
+        </div>
+        <p class="muted small" data-i18n="astro.form.timeNote">시간을 모르면 12:00으로 계산되며, 상승점·하우스는 표시되지 않습니다.</p>
+      </fieldset>
+      <fieldset>
+        <legend data-i18n="astro.form.place">출생지</legend>
+        <div class="field-row">
+          <select id="astro-city" data-i18n-aria="astro.form.place" aria-label="출생지">
+            <option value="seoul" selected data-i18n="astro.city.seoul">서울 (한국)</option>
+            <option value="tokyo" data-i18n="astro.city.tokyo">도쿄 (일본)</option>
+            <option value="beijing" data-i18n="astro.city.beijing">베이징 (중국)</option>
+            <option value="hongkong" data-i18n="astro.city.hongkong">홍콩</option>
+            <option value="bangkok" data-i18n="astro.city.bangkok">방콕 (태국)</option>
+            <option value="london" data-i18n="astro.city.london">런던 (영국)</option>
+            <option value="newyork" data-i18n="astro.city.newyork">뉴욕 (미국)</option>
+            <option value="losangeles" data-i18n="astro.city.losangeles">로스앤젤레스 (미국)</option>
+            <option value="custom" data-i18n="astro.city.custom">직접 입력 (위도/경도)</option>
+          </select>
+        </div>
+        <div class="field-row" id="astro-manual-wrap" hidden>
+          <label class="field"><span data-i18n="astro.form.lat">위도</span>
+            <input type="number" id="astro-lat" step="0.0001" min="-90" max="90" placeholder="37.5665"></label>
+          <label class="field"><span data-i18n="astro.form.lon">경도</span>
+            <input type="number" id="astro-lon" step="0.0001" min="-180" max="180" placeholder="126.9780"></label>
+          <label class="field"><span>UTC±h</span>
+            <input type="number" id="astro-tzoff" step="0.5" min="-12" max="14" placeholder="9"></label>
+        </div>
+        <label class="check-block"><input type="checkbox" id="astro-dst"> <span data-i18n="saju.form.manualDst">출생 당시 서머타임 시행 중</span></label>
+      </fieldset>
+
+      <p id="astro-error" class="error-box" role="alert" hidden></p>
+      <div class="btn-row">
+        <button type="submit" class="btn primary" data-i18n="astro.form.calculate">차트 계산</button>
+        <button type="reset" class="btn" data-i18n="common.reset">초기화</button>
+      </div>
+    </form>
+
+    <section id="astro-result" class="card result-card" hidden aria-live="polite">
+      <div class="result-head">
+        <h2 data-i18n="astro.result.title">출생 차트</h2>
+        <button type="button" id="copy-astro" class="btn copy-btn" data-i18n="common.copyAll">📋 모든 정보 복사 (.md)</button>
+      </div>
+      <div id="astro-result-body"></div>
+    </section>
+  </section>
+
+  <!-- SEO 소개 문단 -->
+  <section class="seo-intro">
+    <h2 data-i18n="footer.aboutTitle">오픈소스 프로젝트</h2>
+    <p data-i18n="footer.aboutText">
+      Fortune Platform은 사주 만세력·타로·점성술 계산기를 누구나 무료로 사용하고 검증할 수 있도록 공개한
+      MIT 라이선스 오픈소스 프로젝트입니다. 모든 계산은 브라우저 안에서만 이루어지며 개인정보를 수집하지 않습니다.
+    </p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h3 data-i18n="footer.links">링크</h3>
+      <ul>
+        <li><a href="https://fortune-org.github.io/fortune-platform/" data-i18n="footer.landing">웹 앱 (GitHub Pages)</a></li>
+        <li><a href="https://github.com/fortune-org/fortune-platform" rel="noopener" target="_blank" data-i18n="footer.repo">GitHub 저장소</a></li>
+        <li><a href="about.html" data-i18n="nav.about">소개</a></li>
+        <li><a href="guide.html" data-i18n="nav.guide">가이드</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 data-i18n="footer.contributorTitle">기여자</h3>
+      <p>
+        <span data-i18n="footer.contributorName">박성모 (Park Sung-mo)</span><br>
+        <a href="https://github.com/GoGoComputer" rel="noopener" target="_blank">GitHub @GoGoComputer</a>
+      </p>
+    </div>
+    <div>
+      <h3 data-i18n="footer.contactTitle">연락처</h3>
+      <p>
+        <button type="button" id="contact-reveal" class="btn small" data-i18n="footer.contactReveal">이메일 주소 보기</button><br>
+        <small class="muted" data-i18n="footer.contactNote">스팸 방지를 위해 버튼을 누르면 표시됩니다.</small>
+      </p>
+    </div>
+    <div>
+      <h3 data-i18n="footer.license">MIT 라이선스</h3>
+      <p class="muted small" data-i18n="footer.privacy">개인정보를 수집·전송하지 않습니다.</p>
+      <p class="muted small">© <span id="footer-year">2026</span> Fortune Platform Contributors</p>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

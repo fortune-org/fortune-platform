@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# 편집기
+.vscode/
+.idea/
+
+# Node (테스트 실행 시 생성될 수 있음)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 로컬 임시
+*.log
+tmp/

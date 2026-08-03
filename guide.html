@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사주 만세력 가이드 - 천간지지·오행·절기·납음오행 설명</title>
+  <meta name="description" content="사주 만세력의 모든 것을 배워보세요. 천간지지란 무엇인가, 오행의 의미, 절기와 월령의 역할, 납음오행과 지장간·십성·12운성까지 자세히 설명합니다.">
+  <meta name="keywords" content="천간지지, 십간, 십이지, 오행, 절기, 월령, 납음오행, 지장간, 십성, 12운성, 사주 가이드">
+  <link rel="canonical" href="https://fortune-org.github.io/fortune-platform/guide.html">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="./">
+      <span class="brand-mark" aria-hidden="true">卦</span>
+      <span class="brand-text">
+        <strong data-i18n="brand">Fortune Platform</strong>
+        <small data-i18n="brandSub">오픈소스 만세력 · 타로 · 점성술</small>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="주 메뉴">
+      <a href="./" data-i18n="nav.home">계산기</a>
+      <a href="guide.html" class="active" data-i18n="nav.guide">가이드</a>
+      <a href="faq.html" data-i18n="nav.faq">FAQ</a>
+      <a href="about.html" data-i18n="nav.about">소개</a>
+    </nav>
+    <div class="lang-switch" role="group" data-i18n-aria="lang.label" aria-label="언어 선택">
+      <button type="button" data-lang-btn="ko" data-i18n="lang.ko">한국어</button>
+      <button type="button" data-lang-btn="en" data-i18n="lang.en">English</button>
+    </div>
+  </div>
+</header>
+
+<main class="container content-page">
+  <h1 data-i18n="guide.title">사주 만세력 완벽 가이드</h1>
+  <p class="muted" data-i18n="guide.intro">사주 만세력을 이해하는 데 필요한 핵심 개념을 정리했습니다.</p>
+
+  <h2 data-i18n="guide.s1t">천간지지(天干地支)란?</h2>
+  <p data-i18n="guide.s1p"></p>
+  <h3 data-i18n="guide.stemsTable">천간 10자</h3>
+  <div id="guide-stems"></div>
+  <h3 data-i18n="guide.branchesTable">지지 12자</h3>
+  <div id="guide-branches"></div>
+
+  <h2 data-i18n="guide.s2t">오행(五行)이 중요한 이유</h2>
+  <p data-i18n="guide.s2p"></p>
+
+  <h2 data-i18n="guide.s3t">절기(節氣)와 월령(月令)</h2>
+  <p data-i18n="guide.s3p"></p>
+  <h3 data-i18n="guide.termsTable">24절기</h3>
+  <div id="guide-terms"></div>
+
+  <h2 data-i18n="guide.s4t">납음오행(納音五行)</h2>
+  <p data-i18n="guide.s4p"></p>
+
+  <h2 data-i18n="guide.s5t">지장간·십성·12운성</h2>
+  <p data-i18n="guide.s5p"></p>
+
+  <h2 data-i18n="guide.s6t">대운(大運)과 시간 보정</h2>
+  <p data-i18n="guide.s6p"></p>
+
+  <p><a class="btn primary" href="./" data-i18n="guide.backToCalc">계산기로 돌아가기</a></p>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <h3 data-i18n="footer.links">링크</h3>
+      <ul>
+        <li><a href="https://github.com/fortune-org/fortune-platform" rel="noopener" target="_blank" data-i18n="footer.repo">GitHub 저장소</a></li>
+        <li><a href="about.html" data-i18n="nav.about">소개</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 data-i18n="footer.contributorTitle">기여자</h3>
+      <p><span data-i18n="footer.contributorName">박성모 (Park Sung-mo)</span><br>
+        <a href="https://github.com/GoGoComputer" rel="noopener" target="_blank">GitHub @GoGoComputer</a></p>
+    </div>
+    <div>
+      <h3 data-i18n="footer.contactTitle">연락처</h3>
+      <p><button type="button" id="contact-reveal" class="btn small" data-i18n="footer.contactReveal">이메일 주소 보기</button><br>
+        <small class="muted" data-i18n="footer.contactNote">스팸 방지를 위해 버튼을 누르면 표시됩니다.</small></p>
+    </div>
+    <div>
+      <h3 data-i18n="footer.license">MIT 라이선스</h3>
+      <p class="muted small">© <span id="footer-year">2026</span> Fortune Platform Contributors</p>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="js/guide-page.js"></script>
+</body>
+</html>
