@@ -15,7 +15,8 @@
   - 시주: 오서둔 공식이 전통 시두법 표와 일치
 
 사용법
-  python3 tools/generate_data.py [DB경로]
+  MANSERYEOK_DB=/path/to/Manseryeok.db python3 tools/generate_data.py
+  또는: python3 tools/generate_data.py /path/to/Manseryeok.db
 """
 
 from __future__ import annotations
@@ -27,10 +28,7 @@ import sqlite3
 import sys
 from datetime import date, datetime, timedelta
 
-DEFAULT_DB = os.environ.get(
-    "MANSERYEOK_DB",
-    "/Users/mo/DEV/awsKeys/MobidicSajutarot/loving-bell/backend/lib/Manseryeok.db",
-)
+DEFAULT_DB = os.environ.get("MANSERYEOK_DB", "Manseryeok.db")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

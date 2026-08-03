@@ -5,7 +5,8 @@ geocentric apparent ecliptic longitude (date 기준 분점) 를 여러 시점에
 계산하여 test/astro-vectors.json 으로 저장한다.
 JS 저정밀 엔진(js/astro/ephemeris.js)은 이 값과 허용 오차 내에서 일치해야 한다.
 
-사용법: /tmp/fp-astro-venv/bin/python tools/generate_astro_vectors.py
+사용법: DE421_DIR=/path/to/dir python3 tools/generate_astro_vectors.py
+(skyfield 필요: pip install skyfield)
 """
 
 import json
@@ -13,10 +14,7 @@ import os
 
 from skyfield.api import Loader
 
-LIB = os.environ.get(
-    "DE421_DIR",
-    "/Users/mo/DEV/awsKeys/MobidicSajutarot/loving-bell/backend/lib",
-)
+LIB = os.environ.get("DE421_DIR", ".")  # de421.bsp 가 있는 디렉터리
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 load = Loader(LIB, verbose=False)
