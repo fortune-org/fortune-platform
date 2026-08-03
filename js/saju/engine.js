@@ -2,11 +2,15 @@
 // 기준: 절입 시각(분 단위) 경계, 정자시법 기본(야자시 옵션), JDN 일주 공식
 
 import {
-  STEMS, BRANCHES, ELEMENTS, NAPEUM, JIJANGAN, SIPSEONG,
+  STEMS, BRANCHES, NAPEUM, JIJANGAN,
   UNSEONG_NAMES, UNSEONG_START, UNSEONG_DIR,
   KOREA_TZ_HISTORY, KOREA_DST, TIMEZONES, ganjiParts,
 } from './constants.js';
 import { toJdn, fromJdn, printedMin, fromPrintedMin } from './calendar.js';
+import {
+  sipsinOf, analyzeRelations, sinsalOf, specialSalOf, gongmangDetail,
+  analyzeYongsin, weightedCounts,
+} from './analysis.js';
 
 // 1900-01-06 소한 이전 (1899 기해년 대설 관할) 폴백
 const FALLBACK = { yearIdx: 35, monthIdx: 12, sajuYear: 1899 };
@@ -157,6 +161,11 @@ export function computeSaju(cal, input) {
     if (idx === null) { pillars[key] = null; continue; }
     pillars[key] = buildPillar(idx, dayStemIdx, key === 'day');
   }
+  // 신살 (일간·일지 + 연지 기준)
+  for (const key of ['year', 'month', 'day', 'hour']) {
+    if (!pillars[key]) continue;
+    pillars[key].sinsal = sinsalOf(dayStemIdx, dayIdx % 12, pillars[key].branchIdx, yearIdx % 12);
+  }
 
   // 10. 오행 분포 (천간 4 + 지지 4)
   const elementCount = [0, 0, 0, 0, 0];
@@ -167,13 +176,29 @@ export function computeSaju(cal, input) {
     elementCount[BRANCHES[p.branchIdx].element] += 1;
   }
 
-  // 11. 공망 (일주 기준)
+  // 11. 공망 (일주 기준) + 상세(일/연 + 旬)
   const gongmang = gongmangOf(dayIdx);
+  const gongmangInfo = gongmangDetail(pillars);
 
-  // 12. 대운
+  // 11-1. 명리 상세 분석 (합충형파해·신강신약·용신·조후·가중오행·특수신살)
+  const relations = analyzeRelations(pillars);
+  const simpleCounts = elementCount;
+  const yongsin = analyzeYongsin(dayStemIdx, monthIdx % 12, pillars, simpleCounts);
+  const weighted = weightedCounts(pillars);
+  const specialSal = specialSalOf(dayIdx);
+
+  // 11-2. 나이 (만/세는 현재 시각 기준)
+  const now = input.now instanceof Date ? input.now : new Date();
+  const age = calcAge(sy, sm, sd, now);
+
+  // 12. 대운 (정밀: 방향·대운수·정확년수·전환일)
   let daeun = null;
   if (gender === 'M' || gender === 'F') {
-    daeun = computeDaeun(cal, { kstMin, yearIdx, monthIdx, gender });
+    const daeunRefMin = kstMin - (koreanAdjust ? 30 : 0);
+    daeun = computeDaeun(cal, {
+      kstMin: daeunRefMin, yearIdx, monthIdx, gender, dayStemIdx,
+      birth: { y: sy, m: sm, d: sd, hh, mi },
+    });
   }
 
   return {
@@ -187,12 +212,19 @@ export function computeSaju(cal, input) {
     lunar,           // {ly, lm, leap, ld}
     weekday: (toJdn(sy, sm, sd) + 1) % 7, // 0=일요일
     pillars,         // year/month/day/hour
+    dayStemIdx,
     hourBranchIdx,
     isNightRat,
     sajuYear,
     zodiacAnimal: BRANCHES[yearIdx % 12].animal,
     elementCount,
+    weighted,
     gongmang,
+    gongmangInfo,
+    relations,
+    specialSal,
+    yongsin,
+    age,
     curTerm, nextTerm,
     daeun,
   };
@@ -231,21 +263,15 @@ function buildPillar(idx, dayStemIdx, isDay) {
     branchYang: BRANCHES[g.branchIdx].yang,
     napeum: NAPEUM[idx >> 1],
     jijangan: jj,
-    // 십성: 일간 대비 (일주 천간 자신은 '일원')
-    sipseongStem: isDay ? null : sipseongOf(dayStemIdx, g.stemIdx),
-    sipseongBranch: sipseongOf(dayStemIdx, JIJANGAN[g.branchIdx].stems[2]),
+    // 십성: 일간 대비 (일주 천간 자신은 '일원'), 지지는 체용 기준(BRANCH_SIP_MAP)
+    sipseongStem: isDay ? null : sipsinOf(dayStemIdx, { stemIdx: g.stemIdx }),
+    sipseongBranch: sipsinOf(dayStemIdx, { branchIdx: g.branchIdx }),
     unseong: unseongOf(dayStemIdx, g.branchIdx),
   };
 }
 
-/** 십성: 일간(stem idx) 대비 대상 천간(stem idx) */
-export function sipseongOf(dayStemIdx, targetStemIdx) {
-  if (targetStemIdx === null || targetStemIdx === undefined) return null;
-  const dEl = STEMS[dayStemIdx].element, tEl = STEMS[targetStemIdx].element;
-  const diff = ((tEl - dEl) % 5 + 5) % 5;
-  const same = STEMS[dayStemIdx].yang === STEMS[targetStemIdx].yang;
-  return SIPSEONG[diff][same ? 0 : 1];
-}
+/** 십성: 일간(stem idx) 대비 대상 천간 — analysis.sipsinOf 사용 (하위호환 재수출) */
+export { sipsinOf } from './analysis.js';
 
 /** 12운성: 일간 기준 지지 */
 export function unseongOf(dayStemIdx, branchIdx) {
@@ -265,9 +291,10 @@ export function gongmangOf(ganjiIdx) {
   return [b1, b2];
 }
 
-/** 대운: 양남음녀 순행 / 음남양녀 역행, 절입까지 일수 ÷ 3 (절상법 반올림, 최소 1) */
-export function computeDaeun(cal, { kstMin, yearIdx, monthIdx, gender }) {
-  const yearYang = yearIdx % 2 === 0; // 갑(0)=양 … 짝수 천간 idx = 양간
+/** 대운: 양남음녀 순행 / 음남양녀 역행, 절입까지 일수 ÷ 3 (반올림, 최소 1)
+ *  정밀 전환일: 출생 + diffDays×(365.25/3)일, 이후 3652.5일 간격 (Mobidic 미러) */
+export function computeDaeun(cal, { kstMin, yearIdx, monthIdx, gender, dayStemIdx, birth }) {
+  const yearYang = yearIdx % 2 === 0;
   const forward = (yearYang && gender === 'M') || (!yearYang && gender === 'F');
 
   let gapMin;
@@ -283,14 +310,95 @@ export function computeDaeun(cal, { kstMin, yearIdx, monthIdx, gender }) {
   const days = gapMin / 1440;
   let startAge = Math.round(days / 3);
   if (startAge < 1) startAge = 1;
-  if (startAge > 10) startAge = 10;
+  const exactYears = Math.round((days / 3) * 100) / 100;
+
+  const birthMin = printedMin(birth.y, birth.m, birth.d, birth.hh || 0, birth.mi || 0);
+  const firstTransMin = birthMin + Math.round(days * (365.25 / 3) * 1440);
 
   const list = [];
   for (let i = 1; i <= 10; i += 1) {
     const idx = ((monthIdx + (forward ? i : -i)) % 60 + 60) % 60;
-    list.push({ age: startAge + (i - 1) * 10, ...ganjiParts(idx), napeum: NAPEUM[idx >> 1] });
+    const g = ganjiParts(idx);
+    const transition = fromPrintedMin(firstTransMin + Math.round((i - 1) * 3652.5 * 1440));
+    list.push({
+      no: i,
+      age: startAge + (i - 1) * 10,
+      endAge: startAge + i * 10 - 1,
+      ...g,
+      napeum: NAPEUM[idx >> 1],
+      tenGodStem: dayStemIdx !== undefined ? sipsinOf(dayStemIdx, { stemIdx: g.stemIdx }) : null,
+      tenGodBranch: dayStemIdx !== undefined ? sipsinOf(dayStemIdx, { branchIdx: g.branchIdx }) : null,
+      unseong: dayStemIdx !== undefined ? unseongOf(dayStemIdx, g.branchIdx) : null,
+      transition: { y: transition.y, m: transition.m, d: transition.d },
+    });
   }
-  return { forward, startAge, list };
+  return { forward, startAge, exactYears, list };
+}
+
+/** 세운: 해당 연도(입춘 기준 연간지 = (year-4)%60) 상세 */
+export function seunOf(saju, year) {
+  const idx = ((year - 4) % 60 + 60) % 60;
+  const g = ganjiParts(idx);
+  const dayStemIdx = saju.dayStemIdx;
+  const dayBr = saju.pillars.day.branchIdx;
+  const yearBr = saju.pillars.year.branchIdx;
+  return {
+    year,
+    ...g,
+    napeum: NAPEUM[idx >> 1],
+    tenGodStem: sipsinOf(dayStemIdx, { stemIdx: g.stemIdx }),
+    tenGodBranch: sipsinOf(dayStemIdx, { branchIdx: g.branchIdx }),
+    unseong: unseongOf(dayStemIdx, g.branchIdx),
+    sinsal: sinsalOf(dayStemIdx, dayBr, g.branchIdx, yearBr),
+    animal: BRANCHES[g.branchIdx].animal,
+  };
+}
+
+/** 월운: 해당 달(15일 정오 기준 관할 節)의 월간지 상세 */
+export function wolunOf(cal, saju, year, month) {
+  const mid = printedMin(year, month, 15, 12, 0);
+  const gj = cal.governingJeol(mid);
+  if (!gj) return null;
+  const ip = cal.ipchunMin(year);
+  const sajuYear = ip !== null && mid >= ip ? year : year - 1;
+  const idx = monthIdxFromJeol(gj.termIdx, sajuYear);
+  const g = ganjiParts(idx);
+  const dayStemIdx = saju.dayStemIdx;
+  return {
+    year, month,
+    ...g,
+    napeum: NAPEUM[idx >> 1],
+    tenGodStem: sipsinOf(dayStemIdx, { stemIdx: g.stemIdx }),
+    tenGodBranch: sipsinOf(dayStemIdx, { branchIdx: g.branchIdx }),
+    unseong: unseongOf(dayStemIdx, g.branchIdx),
+    sinsal: sinsalOf(dayStemIdx, saju.pillars.day.branchIdx, g.branchIdx, saju.pillars.year.branchIdx),
+  };
+}
+
+/** 일운: 해당 날짜의 일간지 상세 (+음력) */
+export function ilunOf(cal, saju, y, m, d) {
+  const jdn = toJdn(y, m, d);
+  if (!cal.inRange(jdn)) return null;
+  const idx = ((jdn + cal.dayGanjiOffset) % 60 + 60) % 60;
+  const g = ganjiParts(idx);
+  const dayStemIdx = saju.dayStemIdx;
+  return {
+    y, m, d,
+    ...g,
+    napeum: NAPEUM[idx >> 1],
+    tenGodStem: sipsinOf(dayStemIdx, { stemIdx: g.stemIdx }),
+    tenGodBranch: sipsinOf(dayStemIdx, { branchIdx: g.branchIdx }),
+    unseong: unseongOf(dayStemIdx, g.branchIdx),
+    sinsal: sinsalOf(dayStemIdx, saju.pillars.day.branchIdx, g.branchIdx, saju.pillars.year.branchIdx),
+    lunar: cal.solarToLunar(jdn),
+  };
+}
+
+/** 만나이 */
+function calcAge(y, m, d, now) {
+  let age = now.getFullYear() - y;
+  if (now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d)) age -= 1;
+  return { man: age, korean: now.getFullYear() - y + 1 };
 }
 
 /** 시각을 분 단위로 이동 (달력 안전) */

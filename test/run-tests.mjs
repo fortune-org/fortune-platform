@@ -11,7 +11,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { CalendarData, toJdn } from '../js/saju/calendar.js';
-import { computeSaju } from '../js/saju/engine.js';
+import { computeSaju, seunOf, wolunOf, ilunOf } from '../js/saju/engine.js';
 import { buildDeck, drawCards, SPREADS } from '../js/tarot/deck.js';
 import { dayNumber, geocentricLongitude, gmst, BODIES } from '../js/astro/ephemeris.js';
 
@@ -156,6 +156,73 @@ for (const [y, m, d, ly, lm, leap, ld] of vectors.lunar) {
   // 시간 미입력 → 시주 없음
   const noTime = computeSaju(cal, { ...BASE_OPTS, year: 1990, month: 5, day: 15 });
   check(noTime.pillars.hour === null && !noTime.input.hasTime, 'no time = no hour pillar');
+}
+
+// ── 1h. 상세 분석 골든 케이스 (원본 Python 파이프라인 출력과 대조) ──
+// 1999-10-18 01:11 남 (한국): 기묘년 갑술월 계묘일 임자시
+{
+  const r = computeSaju(cal, {
+    year: 1999, month: 10, day: 18, hour: 1, minute: 11,
+    timezone: 'korea', koreanAdjust: true, gender: 'M',
+    now: new Date(Date.UTC(2026, 7, 3, 3, 0)),
+  });
+  check(r.pillars.hour.hanja === '壬子' && r.pillars.day.hanja === '癸卯'
+    && r.pillars.month.hanja === '甲戌' && r.pillars.year.hanja === '己卯',
+    `golden pillars ${r.pillars.hour?.hanja}${r.pillars.day?.hanja}${r.pillars.month?.hanja}${r.pillars.year?.hanja}`);
+  const st = r.yongsin.strength;
+  check(st.total === -2.83, `golden strength total ${st.total}`);
+  check(st.supportive === 0.649 && st.draining === 3.479, `golden sup/drain ${st.supportive}/${st.draining}`);
+  check(st.level === 'weak' && st.deukryeong.status === '사', `golden level ${st.level}/${st.deukryeong.status}`);
+  check(Math.abs(st.ohRatios['토'] - 42.0) < 0.05, `golden ratio 토 ${st.ohRatios['토']}`);
+  check(r.yongsin.yongsin === '금' && r.yongsin.huisin === '수', `golden yongsin ${r.yongsin.yongsin}/${r.yongsin.huisin}`);
+  check(r.yongsin.confidence === 75, `golden confidence ${r.yongsin.confidence}`);
+  check(r.yongsin.excessGroup === '관성' && Math.abs(r.yongsin.excessRatio - 42.0) < 0.05,
+    `golden excess ${r.yongsin.excessGroup} ${r.yongsin.excessRatio}`);
+  check(r.yongsin.johu.balance === 'cold' && r.yongsin.johu.yongsinOh === '화', `golden johu ${r.yongsin.johu.balance}`);
+  check(r.weighted['목'] === 3.6 && r.weighted['수'] === 3.3 && r.weighted['금'] === 0.3,
+    `golden weighted ${JSON.stringify(r.weighted)}`);
+  // 십신 (지지 체용): 시지 子=비견, 월지 戌=정관
+  check(r.pillars.hour.sipseongBranch.ko === '비견' && r.pillars.month.sipseongBranch.ko === '정관'
+    && r.pillars.hour.sipseongStem.ko === '겁재' && r.pillars.month.sipseongStem.ko === '상관',
+    'golden sipsin');
+  // 운성: 시 건록 / 일 장생 / 월 쇠 / 년 장생
+  check(r.pillars.hour.unseong.ko === '건록' && r.pillars.day.unseong.ko === '장생'
+    && r.pillars.month.unseong.ko === '쇠' && r.pillars.year.unseong.ko === '장생', 'golden unseong');
+  // 신살: 시지 子 → 도화살·건록·지살 / 월지 戌 → 월살
+  check(r.pillars.hour.sinsal.includes('도화살') && r.pillars.hour.sinsal.includes('건록')
+    && r.pillars.hour.sinsal.includes('지살') && r.pillars.month.sinsal.includes('월살'), 'golden sinsal');
+  // 공망: 일공망 진사(甲午旬), 연공망 신유(甲戌旬)
+  check(r.gongmangInfo.day.branches.includes(4) && r.gongmangInfo.day.branches.includes(5)
+    && r.gongmangInfo.day.xun === '甲午', `golden day gongmang ${r.gongmangInfo.day?.xun}`);
+  check(r.gongmangInfo.year.branches.includes(8) && r.gongmangInfo.year.branches.includes(9)
+    && r.gongmangInfo.year.xun === '甲戌', `golden year gongmang ${r.gongmangInfo.year?.xun}`);
+  // 합충형파해: 천간합 1 (甲己), 육합 2 (卯戌 ×2), 형 2 (子卯 ×2)
+  const relCount = (type) => r.relations.filter((x) => x.type === type).length;
+  check(relCount('cheonganHap') === 1 && relCount('yukhap') === 2 && relCount('hyung') === 2,
+    `golden relations ${relCount('cheonganHap')}/${relCount('yukhap')}/${relCount('hyung')}`);
+  // 대운: 역행, 시작 3세, 정확 2.97년, 첫 대운 계유 (전환 2002-10-07)
+  check(r.daeun && !r.daeun.forward && r.daeun.startAge === 3, `golden daeun start ${r.daeun?.startAge}`);
+  check(Math.abs(r.daeun.exactYears - 2.97) <= 0.01, `golden daeun exact ${r.daeun.exactYears}`);
+  check(r.daeun.list[0].hanja === '癸酉' && r.daeun.list[0].endAge === 12, `golden daeun1 ${r.daeun.list[0].hanja}`);
+  check(r.daeun.list[0].transition.y === 2002 && r.daeun.list[0].transition.m === 10,
+    `golden daeun transition ${JSON.stringify(r.daeun.list[0].transition)}`);
+  check(r.age.man === 26, `golden age ${r.age.man}`);
+  // 세운/월운/일운 (2026 병오년, 2026-01 기축월, 2026-08 병신월, 2026-08-03 기유일)
+  const se = seunOf(r, 2026);
+  check(se.hanja === '丙午' && se.tenGodStem.ko === '정재' && se.tenGodBranch.ko === '편재'
+    && se.unseong.ko === '절' && se.sinsal.includes('망신살'), `golden seun ${se.hanja}`);
+  const se23 = seunOf(r, 2023);
+  check(se23.hanja === '癸卯' && se23.sinsal.includes('천을귀인') && se23.sinsal.includes('문창귀인'),
+    `golden seun23 ${se23.hanja}`);
+  const wu1 = wolunOf(cal, r, 2026, 1);
+  const wu8 = wolunOf(cal, r, 2026, 8);
+  check(wu1.hanja === '己丑' && wu1.unseong.ko === '관대', `golden wolun1 ${wu1?.hanja}`);
+  check(wu8.hanja === '丙申' && wu8.tenGodStem.ko === '정재' && wu8.tenGodBranch.ko === '정인'
+    && wu8.unseong.ko === '사', `golden wolun8 ${wu8?.hanja}`);
+  const il = ilunOf(cal, r, 2026, 8, 3);
+  check(il.hanja === '己酉' && il.tenGodStem.ko === '편관' && il.tenGodBranch.ko === '편인'
+    && il.unseong.ko === '병' && il.napeum.ko === '대역토' && il.sinsal.includes('재살')
+    && il.lunar.lm === 6 && il.lunar.ld === 21, `golden ilun ${il?.hanja}`);
 }
 
 // ── 2. 점성술 벡터 ────────────────────────────────────────

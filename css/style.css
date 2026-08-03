@@ -355,6 +355,129 @@ input:disabled { opacity: 0.45; }
   display: grid; place-items: center; color: #fff; font-size: 1.4rem; font-weight: 700;
 }
 
+/* ── 사주 확장 (헤더/기둥 카드/운세/달력) ── */
+.saju-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 8px; }
+
+.saju-header-mark {
+  flex: 0 0 auto; width: 52px; height: 52px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff; font-size: 1.6rem; display: grid; place-items: center;
+}
+
+.saju-header-title { margin: 0 0 2px; font-size: 1.15rem; }
+.saju-header-meta { margin: 0 0 6px; font-size: 0.92rem; }
+
+.badge-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge-row.wrap { row-gap: 8px; }
+
+.badge {
+  display: inline-block; padding: 2px 10px; border-radius: 999px;
+  background: var(--surface-2); font-size: 0.75rem; color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.badge.accent {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent); border-color: var(--accent); font-weight: 700;
+}
+
+.pillar-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+
+.pillar-card {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 10px; text-align: center; background: var(--surface);
+}
+
+.pillar-card.day-master { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.pillar-card-head { display: flex; justify-content: center; gap: 6px; align-items: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
+
+.pillar-hanja {
+  font-size: 2rem; font-weight: 700; line-height: 1.25;
+  border-radius: 8px; margin: 2px 0;
+}
+
+.pillar-ko { margin: 4px 0 2px; font-weight: 700; }
+.pillar-sub { margin: 1px 0; font-size: 0.78rem; }
+
+.strength-day { margin: 0 0 8px; }
+
+.yongsin-chips { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.yongsin-chip { display: flex; flex-direction: column; gap: 3px; align-items: flex-start; }
+.yongsin-chip .el-chip { font-size: 1rem; padding: 4px 12px; }
+
+.geunmyo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.geunmyo-item { border: 1px solid var(--border); border-radius: 10px; padding: 10px; background: var(--surface); }
+.geunmyo-item p { margin: 2px 0; }
+
+.rel-list { margin: 0; padding-left: 4px; list-style: none; font-size: 0.92rem; }
+.rel-list li { margin: 4px 0; }
+.rel-type {
+  display: inline-block; min-width: 74px; font-size: 0.78rem; font-weight: 700;
+  color: var(--primary-strong); margin-right: 4px;
+}
+
+.luck-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.luck-list.months { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); }
+
+.luck-item {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  border: 1px solid var(--border); border-radius: 10px;
+  background: var(--surface-2); padding: 8px 4px; cursor: pointer;
+  color: var(--text); font: inherit; transition: border-color 0.12s;
+}
+
+.luck-item:hover { border-color: var(--primary); }
+.luck-item.selected { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+.luck-item.current { background: color-mix(in srgb, var(--accent) 10%, var(--surface-2)); }
+
+.luck-ganji { font-size: 1.15rem; font-weight: 700; }
+.luck-sub { font-size: 0.72rem; color: var(--text-muted); }
+.luck-age { font-size: 0.72rem; color: var(--text-muted); }
+.luck-date { font-size: 0.66rem; }
+.luck-tg { font-size: 0.7rem; }
+.luck-sinsal { font-size: 0.64rem; color: var(--accent); text-align: center; line-height: 1.3; margin: 2px 0 0; }
+
+.ilun-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.ilun-wd { text-align: center; font-size: 0.72rem; color: var(--text-muted); font-weight: 700; padding: 2px 0; }
+.ilun-cell {
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  border: 1px solid var(--border); border-radius: 8px; padding: 4px 1px;
+  background: var(--surface); min-height: 56px;
+}
+.ilun-cell.empty { border: none; background: transparent; }
+.ilun-cell.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.ilun-day { font-size: 0.7rem; color: var(--text-muted); }
+.ilun-ganji { font-size: 0.9rem; font-weight: 700; }
+.ilun-tg { font-size: 0.58rem; color: var(--text-muted); text-align: center; }
+
+.today-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.today-card {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 12px; background: var(--surface);
+}
+.today-card .luck-ganji { font-size: 1.5rem; }
+.today-card p { margin: 2px 0; text-align: center; }
+
+.flow-strip { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px; }
+.flow-item {
+  flex: 0 0 auto; min-width: 84px;
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  border: 1px solid var(--border); border-radius: 10px; padding: 8px 6px;
+  background: var(--surface-2);
+}
+.flow-item.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.flow-hanja { font-size: 1.3rem; font-weight: 700; border-radius: 6px; padding: 0 8px; }
+
+/* 타로 조합 해석 */
+.tarot-synthesis {
+  margin-top: 14px; border: 1px solid var(--border); border-left: 4px solid var(--primary);
+  border-radius: 10px; padding: 12px 14px; background: var(--surface-2);
+}
+.tarot-synthesis h4 { margin: 0 0 6px; }
+.tarot-synthesis p { margin: 4px 0; font-size: 0.95rem; }
+.tarot-special { color: var(--accent); }
+
 /* ── 푸터 ─────────────────────────────── */
 .site-footer {
   margin-top: 48px; border-top: 1px solid var(--border);

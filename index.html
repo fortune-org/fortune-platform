@@ -79,6 +79,11 @@
     <form id="saju-form" class="card" hidden novalidate>
       <h2 data-i18n="saju.form.title">출생 정보 입력</h2>
 
+      <label class="field">
+        <span data-i18n="saju.form.name">이름 (선택)</span>
+        <input type="text" id="saju-name" maxlength="30" data-i18n-placeholder="saju.form.namePh" autocomplete="off">
+      </label>
+
       <fieldset>
         <legend data-i18n="saju.form.birthDate">생년월일</legend>
         <div class="field-row">
@@ -182,6 +187,21 @@
             <option value="three" selected data-i18n="tarot.spread.three">쓰리 카드 (3장)</option>
             <option value="five" data-i18n="tarot.spread.five">파이브 카드 (5장)</option>
             <option value="celtic" data-i18n="tarot.spread.celtic">켈틱 크로스 (10장)</option>
+            <option value="free" data-i18n="tarot.spread.free">자유 타로 (1~12장)</option>
+          </select>
+        </label>
+        <label class="field" id="tarot-count-wrap" hidden>
+          <span data-i18n="tarot.form.count">카드 수 (1~12)</span>
+          <input type="number" id="tarot-count" min="1" max="12" value="3" inputmode="numeric">
+        </label>
+        <label class="field">
+          <span data-i18n="tarot.form.topic">주제 선택</span>
+          <select id="tarot-topic">
+            <option value="free" selected data-i18n="tarot.topic.free">자유 질문</option>
+            <option value="love" data-i18n="tarot.topic.love">연애운</option>
+            <option value="career" data-i18n="tarot.topic.career">직업·일운</option>
+            <option value="relation" data-i18n="tarot.topic.relation">인간관계</option>
+            <option value="daily" data-i18n="tarot.topic.daily">오늘의 운세</option>
           </select>
         </label>
       </div>

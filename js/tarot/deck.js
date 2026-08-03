@@ -245,7 +245,7 @@ export function buildDeck() {
   return deck;
 }
 
-/** 스프레드 정의: positions 는 i18n 키 (tarot.positions.*) */
+/** 스프레드 정의: positions 는 i18n 키 (tarot.positions.*). free 는 가변(1~12장) */
 export const SPREADS = [
   { key: 'one', count: 1, positions: ['focus'] },
   { key: 'three', count: 3, positions: ['past', 'present', 'future'] },
@@ -255,7 +255,50 @@ export const SPREADS = [
     positions: ['heart', 'challenge', 'foundation', 'recentPast', 'crown',
       'nearFuture', 'self', 'environment', 'hopesFears', 'outcome'],
   },
+  { key: 'free', count: 0, positions: [] }, // count 런타임 지정 (1~12), 포지션은 '카드 N'
 ];
+
+/** 특수 카드 조합 (뽑힌 카드 안의 쌍 일치 시 표시) — 자체 저작 해설 문장 */
+export const SPECIAL_COMBOS = [
+  {
+    ids: ['major-0', 'major-21'],
+    ko: '광대의 무한한 잠재력이 세계 카드의 완성과 만났습니다. 지금 시작하는 일은 큰 순환을 돌아 완성으로 이어질 흐름입니다.',
+    en: 'The Fool\u2019s boundless potential meets the completion of The World — what begins now tends to travel the full circle toward fulfillment.',
+  },
+  {
+    ids: ['major-13', 'major-16'],
+    ko: '죽음과 탑이 함께 나오면 큰 전환의 신호로 읽힙니다. 낚은 구조가 빠르게 해체되고 새 판이 짜이는 흐름입니다.',
+    en: 'Death together with The Tower signals sweeping transformation — old structures dissolve quickly to make room for a new configuration.',
+  },
+  {
+    ids: ['major-17', 'major-19'],
+    ko: '별과 태양의 조합은 회복 뒤에 찾아오는 밝은 성과를 암시하는 대표적인 길조 조합입니다.',
+    en: 'The Star with The Sun is a classic bright pairing — hope and healing followed by visible success.',
+  },
+  {
+    ids: ['major-6', 'major-15'],
+    ko: '연인과 악마의 조합은 매력과 집착이 공존함을 보여줍니다. 관계·선택에서 건강한 경계가 중요해지는 흐름입니다.',
+    en: 'The Lovers with The Devil shows attraction and attachment side by side — healthy boundaries become the key question.',
+  },
+  {
+    ids: ['major-10', 'major-2'],
+    ko: '운명의 수레바퀴와 여사제의 조합은 흐름을 억지로 밀기보다 직관을 따라 타이밍을 기다리라는 신호로 읽힙니다.',
+    en: 'Wheel of Fortune with The High Priestess suggests trusting intuition and timing rather than forcing the flow.',
+  },
+];
+
+/** 뽑힌 카드 집합에서 특수 조합 찾기 */
+export function findSpecialCombos(drawn) {
+  const ids = new Set(drawn.map((x) => x.card.id));
+  return SPECIAL_COMBOS.filter((c) => c.ids.every((id) => ids.has(id)));
+}
+
+/** 카드의 조합용 핵심 태그 (키워드 앞 2개 조합) */
+export function cardTag(card, reversed, lang) {
+  const set = reversed ? card.rev : card.up;
+  const words = lang === 'ko' ? set.ko : set.en;
+  return words.slice(0, 2).join(' · ');
+}
 
 /** 암호학적 난수 기반 셔플 + 드로우 */
 export function drawCards(deck, count, allowReversed) {

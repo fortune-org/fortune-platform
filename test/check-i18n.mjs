@@ -56,6 +56,23 @@ for (const k of ['cardinal', 'fixed', 'mutable']) dynamic.push(`astro.mod.${k}`)
 for (const k of ['seoul', 'tokyo', 'beijing', 'hongkong', 'bangkok', 'london', 'newyork', 'losangeles', 'custom']) dynamic.push(`astro.city.${k}`);
 for (const k of ['Index', 'Guide', 'Faq', 'About']) dynamic.push(`meta.title${k}`);
 dynamic.push('yinyang.yang', 'yinyang.um', 'guide.jeol', 'guide.junggi');
+// 사주 상세 분석 동적 키
+for (const k of ['왕', '상', '휴', '수', '사']) dynamic.push(`saju.wsxss.${k}`);
+for (const k of ['very_strong', 'strong', 'neutral', 'weak', 'very_weak']) dynamic.push(`saju.strengthLevel.${k}`);
+for (const k of ['한', '온', '열']) dynamic.push(`saju.temp.${k}`);
+for (const k of ['조', '습']) dynamic.push(`saju.moisture.${k}`);
+for (const k of ['neutral', 'hotDry', 'hot', 'coldWet', 'cold', 'dry', 'wet']) dynamic.push(`saju.johuBalanceText.${k}`);
+for (const p of ['year', 'month', 'day', 'hour']) {
+  dynamic.push(`saju.posShort.${p}`);
+  for (const f of ['name', 'period', 'family']) dynamic.push(`saju.geunmyo.${p}.${f}`);
+}
+for (const k of ['cheonganHap', 'cheonganChung', 'yukhap', 'samhap', 'banhap', 'banghap', 'amhap', 'chung', 'hyung', 'pa', 'hae', 'wonjin', 'gwimun']) dynamic.push(`saju.relType.${k}`);
+for (const k of ['역마살', '도화살', '화개살', '겁살', '재살', '망신살', '반안살', '천을귀인', '태극귀인', '문창귀인', '학당귀인', '양인살', '건록', '홍염살', '효신살', '천살', '지살', '장성살', '월살', '백호대살', '괴강살']) dynamic.push(`saju.sinsalNames.${k}`);
+for (const k of ['free', 'love', 'career', 'relation', 'daily']) {
+  dynamic.push(`tarot.topic.${k}`);
+  dynamic.push(`tarot.syn.lead.${k}`);
+}
+dynamic.push('tarot.spread.free', 'tarot.pos.cardN');
 for (const k of dynamic) keys.add(k);
 
 let missing = 0;
